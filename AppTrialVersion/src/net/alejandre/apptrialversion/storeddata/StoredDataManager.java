@@ -1,4 +1,4 @@
-package net.alejandre.apptrialversion.staticdata;
+package net.alejandre.apptrialversion.storeddata;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import android.util.Log;
 
 // this SuppressLint is for the SimpleDateFormat.
 @SuppressLint("SimpleDateFormat") 
-public class StaticData {
+public class StoredDataManager {
 	// we need to save the Context (android.content.Context) of our activity:
 	private Context initApp;
 	// we will save on the SharedPreferences as Key=Value (android.content.SharedPreferences) 
@@ -30,13 +30,13 @@ public class StaticData {
 			new SimpleDateFormat("dd/MM/yyyy");
 	
 	/**
-	 * Constructor StaticData:
+	 * Constructor StoredDataManager(Context ActivityInitApp):
 	 * This method is called when the object is created.
 	 * We instantiate the SharedPreferences and save the Context
 	 * of the application which call this object. In this case InitApp.java
 	 * Finally this create a new Calendar with today.
 	 */
-	public StaticData(Context ActivityInitApp) {
+	public StoredDataManager(Context ActivityInitApp) {
 		// saving the Context of the activity we can call the getSharedPreferences method.
 		initApp = ActivityInitApp;
 		// set the SharedPreferences into our variable:
@@ -45,6 +45,9 @@ public class StaticData {
 		today = Calendar.getInstance();
 	}
 	
+	/* --------------------------------------------------------------------
+	 * ------- Methods to work with the dates -----------------------------
+	 * -------------------------------------------------------------------- */
 	/**
 	 * Method isSetDate():
 	 * This method extract the date from the SharedPreferences, save it,
@@ -126,6 +129,59 @@ public class StaticData {
 		Editor editor = sharedPreferences.edit();
 		// we save the date in format dd/MM/yyyy.
  		editor.putString("date",Stringformat.format(end.getTime()));
+ 		// and make that change to persist in our SharedPreferences.
+ 		editor.commit();
+	}
+	
+	/* --------------------------------------------------------------------
+	 * ------- End of Methods to work with the dates ----------------------
+	 * --------------------------------------------------------------------
+	 * --------------------------------------------------------------------
+	 * ------- Methods to work with the payment data  ---------------------
+	 * -------------------------------------------------------------------- */
+	
+	/**
+	 * Method initializePaid():
+	 * This method extract the paid value from the SharedPreferences, and
+	 * check if it is not set to initialize it to false.
+	 * @return
+	 */
+	public void initializePaid() {
+		// we extract the paid value from the sharedPreferences as String.
+		String paidSaved = sharedPreferences.getString("paid", "not set");
+		// if paid is not set ...
+		if(paidSaved.equals("not set")) {
+        	// we set it to false:
+			setPaid(false);
+        }
+		
+	}
+	
+	/**
+	 * Method isPaid():
+	 * This method extract the paid value from the SharedPreferences and
+	 * return it.
+	 * @return
+	 */
+	public boolean isPaid() {
+		// we extract the paid value from the sharedPreferences as String.
+		String paidSaved = sharedPreferences.getString("paid", "not set");
+		// we check if it is saved true and return true or,
+		// in other case we return false.
+		return (paidSaved.equals("true")) ? true : false;
+	}
+	
+	/**
+	 * Method setPaid(boolean isPaid):
+	 * this method set the paid value in the SharedPreferences.
+	 * @param isPaid
+	 */
+	public void setPaid(boolean isPaid) {
+		// we use an Editor (android.content.SharedPreferences.Editor) to storage
+		// data in our SharedPreferences:
+		Editor editor = sharedPreferences.edit();
+		// we save the date in format dd/MM/yyyy.
+ 		editor.putString("paid", (isPaid) ? "true" : "false" );
  		// and make that change to persist in our SharedPreferences.
  		editor.commit();
 	}
