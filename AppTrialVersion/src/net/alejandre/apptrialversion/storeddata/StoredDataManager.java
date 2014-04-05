@@ -33,7 +33,7 @@ public class StoredDataManager {
 	 * Constructor StoredDataManager(Context ActivityInitApp):
 	 * This method is called when the object is created.
 	 * We instantiate the SharedPreferences and save the Context
-	 * of the application which call this object. In this case InitApp.java
+	 * of the application which call this object. In this case InitActivity.java
 	 * Finally this create a new Calendar with today.
 	 */
 	public StoredDataManager(Context ActivityInitApp) {
@@ -108,9 +108,21 @@ public class StoredDataManager {
 	 * will expire.
 	 */
 	public int DaysToEnd() {
-		// CHECK THIS OUT! - we catch the day of year from end of trial,
-		// and we subtract today day of year. (bad english sorry).
-		return dateEndOfTrial.get(Calendar.DAY_OF_YEAR) - today.get(Calendar.DAY_OF_YEAR);
+		// CHECK THIS OUT!
+		// if the year is the same ...
+		if(today.get(Calendar.YEAR) == dateEndOfTrial.get(Calendar.YEAR)) {
+			return dateEndOfTrial.get(Calendar.DAY_OF_YEAR) - today.get(Calendar.DAY_OF_YEAR);
+		} else if(today.get(Calendar.YEAR) > dateEndOfTrial.get(Calendar.YEAR)) {
+			// if the year of today is biger than the year of trial end ...
+			return 0;
+		}
+		// if the year of today is smaller than the year of trial end ...
+		// what we have to do is take how many days of the year we have to left the year ...
+		int daysToEndOfYear = 365 - today.get(Calendar.DAY_OF_YEAR);
+		// now this days with days of year to the end of trial we have how many days we have to
+		// the trial version ends...
+		return dateEndOfTrial.get(Calendar.DAY_OF_YEAR) + daysToEndOfYear;
+		
 	}
 	
 	/**
