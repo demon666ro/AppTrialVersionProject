@@ -92,8 +92,8 @@ public class StaticData {
 	 * @return false - if is not the same day.
 	 */
 	public boolean isEndOfTrial() {
-		// we have not the same day?
-		if(DaysToEnd() != 0)
+		// we have not the same day and the day of the end has not passed ...
+		if(DaysToEnd() >= 0)
 			return false;
 		// it is the same day.
 		return true;
